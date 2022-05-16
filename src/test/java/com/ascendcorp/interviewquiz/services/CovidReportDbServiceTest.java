@@ -86,6 +86,21 @@ public class CovidReportDbServiceTest {
         assertEquals(result.size(), covidReportData.size());
     }
 
+    @Test
+    public void getReportShouldErrorAndThrowError1() {
+        ParseException thrown = assertThrows(ParseException.class, () -> covidReportDbService.getReports(""), "date cannot be null or empty");
+
+        assertEquals("date cannot be null or empty", thrown.getMessage());
+    }
+
+    @Test
+    public void getReportShouldErrorAndThrowError2() {
+        String date = "20220202";
+        ParseException thrown = assertThrows(ParseException.class, () -> covidReportDbService.getReports(date), String.format("%s cannot parse to date format(%s)", date.trim(), this.covidReportDbService.getDateFormat()));
+
+        assertEquals(String.format("%s cannot parse to date format(%s)", date.trim(), this.covidReportDbService.getDateFormat()), thrown.getMessage());
+    }
+
     // DONE 4.5 Add unit tests for method getHighestLowestReport() and line coverage must be 100%
     @Test
     public void getHighestLowestReportShouldSuccessAndReturnWithResponse() {

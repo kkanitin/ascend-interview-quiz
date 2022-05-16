@@ -16,7 +16,6 @@ import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +35,9 @@ public class CovidReportApiService implements CovidReportService {
         List<CovidReportData> covidReportDataList = new ArrayList<>();
         if (null == date || date.isEmpty() || date.isBlank()) {
             throw new ParseException("date cannot be null or empty", 0);
+        }
+        if (!this.isDateFormatValid(date)) {
+            throw new ParseException(String.format("%s cannot parse to date format(%s)", date.trim(), dateFormat), 0);
         }
         URI uri = new URI(COVID_REPORT_SOURCE_ENDPOINT);
         ResponseEntity<List> responseEntity = restTemplate.getForEntity(uri, List.class);
@@ -107,6 +109,10 @@ public class CovidReportApiService implements CovidReportService {
     @Override
     public boolean isDateFormatValid(String dateStr) {
         return dateStr.matches(datePattern);
+    }
+
+    public String getDateFormat() {
+        return dateFormat;
     }
 
 }

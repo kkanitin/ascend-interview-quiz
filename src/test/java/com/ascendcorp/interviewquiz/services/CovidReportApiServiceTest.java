@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,10 +45,18 @@ public class CovidReportApiServiceTest {
     }
 
     @Test
-    public void getReportsShouldError() {
+    public void getReportsShouldErrorAndThrowError1() {
         ParseException thrown = assertThrows(ParseException.class, () -> covidReportApiService.getReports(""), "date cannot be null or empty");
 
         assertEquals("date cannot be null or empty", thrown.getMessage());
+    }
+
+    @Test
+    public void getReportShouldErrorAndThrowError2() {
+        String date = "20220202";
+        ParseException thrown = assertThrows(ParseException.class, () -> covidReportApiService.getReports(date), String.format("%s cannot parse to date format(%s)", date.trim(), this.covidReportApiService.getDateFormat()));
+
+        assertEquals(String.format("%s cannot parse to date format(%s)", date.trim(), this.covidReportApiService.getDateFormat()), thrown.getMessage());
     }
 
     // DONE 2.4 Add unit tests for method getHighestLowestReport() and line coverage must be 100%

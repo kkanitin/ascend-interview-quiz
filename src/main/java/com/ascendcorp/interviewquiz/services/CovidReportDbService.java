@@ -69,7 +69,6 @@ public class CovidReportDbService implements CovidReportService {
         if (!this.isDateFormatValid(date)) {
             throw new ParseException(String.format("%s cannot parse to date format(%s)", date.trim(), dateFormat), 0);
         }
-
         List<CovidReportEntity> result = covidReportRepository.findByDateIs(date).orElse(new ArrayList<>());
         List<CovidReportData> covidReportDataList = new ArrayList<>();
         result.forEach(item ->
@@ -96,5 +95,9 @@ public class CovidReportDbService implements CovidReportService {
     @Override
     public boolean isDateFormatValid(String dateStr) {
         return dateStr.matches(datePattern);
+    }
+
+    public String getDateFormat() {
+        return dateFormat;
     }
 }
