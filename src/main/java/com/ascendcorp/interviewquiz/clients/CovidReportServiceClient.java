@@ -32,7 +32,7 @@ public class CovidReportServiceClient {
         this.webClient = webClient;
     }
 
-    public List<CovidReportData> fetchCovidReport() throws IOException, URISyntaxException {//
+    public List<CovidReportData> fetchCovidReport() {//
         // DONE 1.1 Implement calling public api to get covid cases data
         List<CovidReportData> responseList = new ArrayList<>();
         try {

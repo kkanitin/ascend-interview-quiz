@@ -13,6 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +62,7 @@ public class CovidReportDbServiceTest {
 
     // DONE 4.4 Add unit tests for method getReports() and line coverage must be 100%
     @Test
-    public void getReportsShouldSuccessAndReturnWithResponse() {
+    public void getReportsShouldSuccessAndReturnWithResponse() throws ParseException {
         List<CovidReportData> covidReportData = new ArrayList<>() {
             {
                 add(new CovidReportData("2022-01-02", 100L, 1000L, "province1", 20L, 30L));

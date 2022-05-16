@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -60,8 +61,15 @@ public class CovidReportDbService implements CovidReportService {
     }
 
     @Override
-    public List<CovidReportData> getReports(String date) {
+    public List<CovidReportData> getReports(String date) throws ParseException {
         // DONE 4.2 Implement the first API by query from database
+        if (null == date || date.isEmpty() || date.isBlank()) {
+            throw new ParseException("date cannot be null or empty", 0);
+        }
+        if (!this.isDateFormatValid(date)) {
+            throw new ParseException(String.format("%s cannot parse to date format(%s)", date.trim(), dateFormat), 0);
+        }
+
         List<CovidReportEntity> result = covidReportRepository.findByDateIs(date).orElse(new ArrayList<>());
         List<CovidReportData> covidReportDataList = new ArrayList<>();
         result.forEach(item ->
@@ -73,7 +81,6 @@ public class CovidReportDbService implements CovidReportService {
     @Override
     public CovidProvinceCaseResponse getHighestLowestReport() {
         // DONE 4.3 Implement the second API by query from database
-        System.out.println("getHighestLowestReport");
         List<CovidReportEntity> maxCovidReportEntity = covidReportRepository.findMaxTotalCase().orElse(new ArrayList<>());
         List<CovidReportEntity> minCovidReportEntity = covidReportRepository.findMinTotalCase().orElse(new ArrayList<>());
         List<CovidProvinceCaseData> highest = maxCovidReportEntity.stream().map(item -> {
@@ -86,4 +93,8 @@ public class CovidReportDbService implements CovidReportService {
         return new CovidProvinceCaseResponse(highest, lowest);
     }
 
+    @Override
+    public boolean isDateFormatValid(String dateStr) {
+        return dateStr.matches(datePattern);
+    }
 }

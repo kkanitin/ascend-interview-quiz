@@ -9,6 +9,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -21,14 +22,14 @@ public class CovidReportApiServiceTest {
     private CovidReportApiService covidReportApiService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
         RestTemplate restTemplate = new RestTemplate();
         covidReportApiService = new CovidReportApiService(restTemplate);
     }
 
     // DONE 2.3 Add unit tests for method getReports() and line coverage must be 100%
     @Test
-    public void getReportsShouldSuccessAndReturnWithEmptyResponse() throws URISyntaxException {
+    public void getReportsShouldSuccessAndReturnWithEmptyResponse() throws URISyntaxException, ParseException {
 
         List<CovidReportData> result = covidReportApiService.getReports("2022-01-01");
 
@@ -36,7 +37,7 @@ public class CovidReportApiServiceTest {
     }
 
     @Test
-    public void getReportsShouldSuccessAndReturnWithResponse() throws URISyntaxException {
+    public void getReportsShouldSuccessAndReturnWithResponse() throws URISyntaxException, ParseException {
 
         List<CovidReportData> result = covidReportApiService.getReports("2020-01-12");
 
@@ -46,7 +47,7 @@ public class CovidReportApiServiceTest {
 
     @Test
     public void getReportsShouldError() {
-        NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> covidReportApiService.getReports(""), "date cannot be null or empty");
+        ParseException thrown = assertThrows(ParseException.class, () -> covidReportApiService.getReports(""), "date cannot be null or empty");
 
         assertEquals("date cannot be null or empty", thrown.getMessage());
     }

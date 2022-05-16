@@ -23,7 +23,7 @@ public class CovidReportController {
     private final Logger logger = LoggerFactory.getLogger(CovidReportController.class);
     private final String covidReportServiceName;
 
-    public CovidReportController(@Qualifier("covidReportApiService") CovidReportService covidReportService) {
+    public CovidReportController(@Qualifier("covidReportDbService") CovidReportService covidReportService) {
         this.covidReportService = covidReportService;
         this.covidReportServiceName = covidReportService.getClass().getSimpleName();
     }
@@ -33,7 +33,6 @@ public class CovidReportController {
             @RequestParam(value = "date", required = false) String date) {
         logger.info("Start {}.getReports()", covidReportServiceName);
         long start = System.nanoTime();
-        System.out.println("date : " + date);
         List<CovidReportData> response = null;
         try {
             response = covidReportService.getReports(date);
