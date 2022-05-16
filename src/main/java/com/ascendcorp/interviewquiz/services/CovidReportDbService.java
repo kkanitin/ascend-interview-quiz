@@ -36,28 +36,23 @@ public class CovidReportDbService implements CovidReportService {
     @PostConstruct
     public void fetchCovidReport() {
         logger.info("Start fetchCovidReport()");
-        try {
-            long start = System.nanoTime();
-            ObjectMapper mapper = new ObjectMapper();
-            List<CovidReportData> response = covidReportServiceClient.fetchCovidReport();
+        long start = System.nanoTime();
+        ObjectMapper mapper = new ObjectMapper();
+        List<CovidReportData> response = covidReportServiceClient.fetchCovidReport();
 
-            Set<CovidReportEntity> entitySet = response
-                    .stream()
-                    .map(data -> {
-                        // DONE 4.1 Initialize data into database
-                        return new CovidReportEntity(data.getTxnDate(),
-                                data.getNewCase(), data.getTotalCase(),
-                                data.getProvince(),
-                                data.getNewCaseExcludeAbroad(),
-                                data.getTotalCaseExcludeAbroad());
-                    }).collect(Collectors.toSet());
+        Set<CovidReportEntity> entitySet = response
+                .stream()
+                .map(data -> {
+                    // DONE 4.1 Initialize data into database
+                    return new CovidReportEntity(data.getTxnDate(),
+                            data.getNewCase(), data.getTotalCase(),
+                            data.getProvince(),
+                            data.getNewCaseExcludeAbroad(),
+                            data.getTotalCaseExcludeAbroad());
+                }).collect(Collectors.toSet());
 
-            covidReportRepository.saveAll(entitySet);
-            logger.info("End fetchCovidReport() [{} ms]", (System.nanoTime() - start) / 1_000_000);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
-        }
+        covidReportRepository.saveAll(entitySet);
+        logger.info("End fetchCovidReport() [{} ms]", (System.nanoTime() - start) / 1_000_000);
     }
 
     @Override
